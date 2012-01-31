@@ -5,11 +5,8 @@ Google Analytics CakePHP Plugin
 Several possibilities :
 
 * `git clone git://github.com/dalpo/Sweetlytics.git` in your plugin directory
-*
 * Download and unzip into a `Sweetlytics` folder in your `plugins` folder
-*
-* If your project is already versioned with Git: 
-* `git submodule add git://github.com/dalpo/Sweetlytics.git app/Plugin/Sweetlytics`
+* If your project is already versioned with Git: `git submodule add git://github.com/dalpo/Sweetlytics.git app/Plugin/Sweetlytics`
 
 # Configuration
 Duplicate `config/google_analytics.php.default` into `config/google_analytics.php` and fill your account information in `$google_analytics` array
@@ -17,8 +14,8 @@ Duplicate `config/google_analytics.php.default` into `config/google_analytics.ph
 # Usage
 In a controller :
 
-* `var $uses = array('GoogleAnalytics.GoogleAnalyticsAccount');` or
-* `$this->loadModel('GoogleAnalytics.GoogleAnalyticsAccount')`
+* `var $uses = array('Sweetlytics.GoogleAnalyticsAccount');` or
+* `$this->loadModel('Sweetlytics.GoogleAnalyticsAccount')`
 
 To get all accounts for the given credentials : `$this->GoogleAnalyticsAccount->find('all');`
 

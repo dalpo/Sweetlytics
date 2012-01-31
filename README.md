@@ -1,9 +1,15 @@
+# Sweetlytics
+Google Analytics CakePHP Plugin 
+
 # Install
 Several possibilities :
 
-* `git clone git://github.com/msadouni/cakephp-plugin-google-analytics.git google_analytics` in your plugin directory
-* Download and unzip into a `google_analytics` folder in your `plugins` folder
-* If your project is already versioned with Git : `git submodule add git://github.com/msadouni/cakephp-plugin-google-analytics.git plugins/google_analytics`
+* `git clone git://github.com/dalpo/Sweetlytics.git` in your plugin directory
+*
+* Download and unzip into a `Sweetlytics` folder in your `plugins` folder
+*
+* If your project is already versioned with Git: 
+* `git submodule add git://github.com/dalpo/Sweetlytics.git app/Plugin/Sweetlytics`
 
 # Configuration
 Duplicate `config/google_analytics.php.default` into `config/google_analytics.php` and fill your account information in `$google_analytics` array

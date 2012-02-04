@@ -1,12 +1,16 @@
 <?php
-class GOOGLE_ANALYTICS_CONFIG
-{
-    var $googleAnalytics = array(
-        'datasource' => 'google_analytics',
-        'Email' => 'email@example.com',
-        'Passwd' => 'password');
-    var $googleAnalytics_test = array(
-        'datasource' => 'google_analytics',
-        'Email' => 'user@google.com',
-        'Passwd' => 'super-secret-password');
+class GOOGLE_ANALYTICS_CONFIG {
+
+  public $googleAnalytics = array(
+    'datasource' => 'google_analytics',
+    'Email' => 'email@example.com',
+    'Passwd' => 'password'
+  );
+
+  public $googleAnalytics_test = array(
+    'datasource' => 'google_analytics',
+    'Email' => 'user@google.com',
+    'Passwd' => 'super-secret-password'
+  );
+  
 }

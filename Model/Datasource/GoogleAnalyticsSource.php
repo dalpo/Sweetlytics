@@ -1,5 +1,7 @@
 <?php
-App::import('Core', array('HttpSocket', 'Xml'));
+
+App::uses('HttpSocket', 'Network/Http');
+App::uses('Xml', 'Utility');
 
 class GoogleAnalyticsSource extends DataSource {
 
@@ -14,11 +16,13 @@ class GoogleAnalyticsSource extends DataSource {
 
   public function __construct($config, $autoConnect = true) {
     parent::__construct($config);
+
     $this->Http =& new HttpSocket();
-    if ($autoConnect)
-    {
+
+    if ($autoConnect) {
       return $this->connect();
     }
+
     return true;
   }
 
@@ -203,9 +207,13 @@ class GoogleAnalyticsSource extends DataSource {
       } else {
         $params['dimensions'] = join(
           array_map(
-            create_public function('$x', 'return \'ga:\'.$x;'),
+            function($x) { return 'ga:'  . $x; },
             $conditions['dimensions']
           ),
+          // array_map(
+          //   create_public function('$x', 'return \'ga:\'.$x;'),
+          //   $conditions['dimensions']
+          // ),
           ','
         );
       }
@@ -217,9 +225,13 @@ class GoogleAnalyticsSource extends DataSource {
       } else {
         $params['metrics'] = join(
           array_map(
-            create_public function('$x', 'return \'ga:\'.$x;'),
+            function($x) { return 'ga:' . $x; },
             $conditions['metrics']
           ),
+          // array_map(
+          //   create_public function('$x', 'return \'ga:\'.$x;'),
+          //   $conditions['metrics']
+          // ),
           ','
         );
       }

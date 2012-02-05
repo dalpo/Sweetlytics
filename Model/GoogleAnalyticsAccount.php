@@ -3,10 +3,11 @@
 // App::uses('google_analytics.php', 'Config');
 include_once APP . 'Config' . DS . 'google_analytics.php';
 
-class GoogleAnalyticsAccount extends SweetlyticsAppModel {
+class GoogleAnalyticsAccount extends Model {
   
   public $useDbConfig = 'googleAnalytics';
   public $useTable = false;
+  public $actsAs = array();
 
   public function __construct() {
     

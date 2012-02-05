@@ -4,15 +4,17 @@ App::uses('HttpSocket', 'Network/Http');
 App::uses('Xml', 'Utility');
 
 class GoogleAnalyticsSource extends DataSource {
+// class GoogleAnalyticsSource {
 
   public $Http = null;
   public $token = '';
   public $base_url = 'https://www.google.com/';
-  public $_baseConfig = array(
-    'datasource' => 'google_analytics',
-    'Email' => '',
-    'Passwd' => '');
   public $cacheSources = false;
+  public $_baseConfig = array(
+    'datasource' => 'Sweetlytics.GoogleAnalyticsSource',
+    'Email' => '',
+    'Passwd' => ''
+  );
 
   public function __construct($config, $autoConnect = true) {
     parent::__construct($config);
@@ -40,7 +42,9 @@ class GoogleAnalyticsSource extends DataSource {
         'Email' => $this->config['Email'],
         'Passwd' => $this->config['Passwd'],
         'service' => 'analytics',
-        'source' => 'cakephp-gapi-0.1'));
+        'source' => 'cakephp-gapi-0.1'
+      )
+    );
 
     if ($this->Http->response['status']['code'] != 200) {
       return false;
@@ -75,31 +79,37 @@ class GoogleAnalyticsSource extends DataSource {
 
     $accounts = $this->get('analytics/feeds/accounts/default');
     $results = $this->__to_array($accounts);
-    $entries = Set::extract('/Feed/Entry', $results);
+
+    // $entries = Set::extract('/Entry', $results);
+    $entries = $results->entry;
+
     $data = array();
 
     foreach ($entries as $entry) {
       // sometimes the the keys are ucfirst'ed, sometimes not...
-      $entry = array_change_key_case($entry['Entry'], CASE_LOWER);
-      $accountId = $this->__extract_property_value(
-        $entry, 'accountId');
-      $accountName = $this->__extract_property_value(
-        $entry, 'accountName');
-      $profileId = $this->__extract_property_value(
-        $entry, 'profileId');
-      $webPropertyId = $this->__extract_property_value(
-        $entry, 'webPropertyId');
+      // $entry = array_change_key_case($entry['Entry'], CASE_LOWER);
+
+      $accountId = $entry->id->__toString();
+      $gaId = array_pop(explode(':', $accountId));
+
+      // $accountName = $this->__extract_property_value($entry, 'accountName');
+      // $profileId = $this->__extract_property_value($entry, 'profileId');
+      // $webPropertyId = $this->__extract_property_value($entry, 'webPropertyId');
+
       $account = array('Account' => array(
-        'id' => $entry['id'],
-        'updated' => $entry['updated'],
-        'title' => $entry['title']['value'],
-        'tableId' => str_replace('ga:', '', $entry['tableid']),
-        'accountId' => $accountId,
-        'accountName' => $accountName,
-        'profileId' => $profileId,
-        'webPropertyId' => $webPropertyId));
+        'id' => $entry->id->__toString(),
+        'updated' => $entry->updated->__toString(),
+        'title' => $entry->title->__toString(),
+        'tableId' => $gaId
+        // 'accountId' => $accountId,
+        // 'accountName' => $accountName,
+        // 'profileId' => $profileId,
+        // 'webPropertyId' => $webPropertyId
+      ));
+
       $data[] = $account;
     }
+
     return $data;
   }
 
@@ -210,10 +220,6 @@ class GoogleAnalyticsSource extends DataSource {
             function($x) { return 'ga:'  . $x; },
             $conditions['dimensions']
           ),
-          // array_map(
-          //   create_public function('$x', 'return \'ga:\'.$x;'),
-          //   $conditions['dimensions']
-          // ),
           ','
         );
       }
@@ -228,10 +234,6 @@ class GoogleAnalyticsSource extends DataSource {
             function($x) { return 'ga:' . $x; },
             $conditions['metrics']
           ),
-          // array_map(
-          //   create_public function('$x', 'return \'ga:\'.$x;'),
-          //   $conditions['metrics']
-          // ),
           ','
         );
       }
@@ -359,14 +361,24 @@ class GoogleAnalyticsSource extends DataSource {
 
   public function __to_array($response = '') {
 
-    $xml = new XML($response);
-    $array = $xml->toArray();
-    $xml->_killParent();
-    $xml->__destruct();
-    $xml = null;
-    unset($xml);
+    return Xml::build($response['body']);
 
-    return $array;
+    // debug($response['body']);
+    // die();
+
+
+    // $array = $xml = Xml::build($response['body']);
+    // debug($xml);
+    // die();
+
+    // $array = $xml->toArray();
+
+    // $xml->_killParent();
+    // $xml->__destruct();
+    // $xml = null;
+    // unset($xml);
+
+    // return $array;
   }
 
   public function __extract_property_value($entry, $property) {
